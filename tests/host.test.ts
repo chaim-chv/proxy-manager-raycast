@@ -36,6 +36,12 @@ describe("normalizePattern", () => {
     expect(normalizePattern("[::1]:8080")).toEqual({ ok: true, pattern: "::1" });
   });
 
+  test("bracketed IPv6 survives the paste path, with or without a port", () => {
+    expect(hostFromInput("[2001:db8::1]:8080")).toBe("2001:db8::1");
+    expect(hostFromInput("[2001:db8::1]")).toBe("2001:db8::1");
+    expect(hostFromInput("http://[2001:db8::1]:8080/x")).toBe("2001:db8::1");
+  });
+
   test("rejects characters the app would reject", () => {
     expect(normalizePattern("exa mple.com").ok).toBe(false);
     expect(normalizePattern("example.com/path").ok).toBe(false);
