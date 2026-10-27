@@ -63,6 +63,35 @@ Manual smoke, once per Raycast major:
    a dev import is pinned to the path it was last built from, and moving or
    deleting that folder leaves a red triangle on every command.
 
+## Why 1.104 and not 2.x — measured, not guessed
+
+Bumping this repo to `@raycast/api@2.9.0` + `@raycast/utils@2.3.3` was tested:
+
+- `tsc --noEmit` and `ray build` pass **with no source changes** — the code only
+  touches APIs that exist in both.
+- The 2.x CLI still targets `com.raycast.macos` and `~/.config/raycast`, and the
+  manifest it writes is byte-identical apart from the dependency versions.
+- `@raycast/api` is provided by the running app, not bundled, so the dependency
+  version changes the *toolchain and types*, not the runtime contract. The only
+  way a 2.x build can break Raycast 1 is by touching a 2.0-only symbol — and the
+  built bundle referenced none.
+
+So the version is a **submission** decision, not a runtime one:
+
+| Choice | Raycast 1 | Raycast 2 | Store review |
+|---|---|---|---|
+| `1.104.25` (current) | verified by hand | works: 2.0 lists no breaking extension-API change, and the Store still ships 1.x builds | accepted today, but the guide says "use the latest API" |
+| `2.9.0` | should work (same symbols), not yet verified by hand | native | satisfies "latest" |
+
+We ship `1.104.25` because it is the only combination verified on both apps, and
+Raycast 2 runs 1.x extensions. If the review asks for 2.x, the swap is:
+
+```bash
+bun add @raycast/api@2.9.0 @raycast/utils@2.3.3     # no source changes expected
+bun run typecheck && bun test && bun run build
+# then the manual matrix above on Raycast 1 and Raycast 2
+```
+
 ## Upgrade policy
 
 Bumping `@raycast/api` across a major requires:

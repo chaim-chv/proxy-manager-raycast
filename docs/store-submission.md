@@ -35,9 +35,9 @@ How submissions actually work, and what this repo still needs. Source of truth:
 
 | Requirement | Where | This repo |
 |---|---|---|
-| `author` = your **Raycast account username** | `package.json` | ⚠️ `chaim-chv` returns 404 from the store API, so that handle is not registered (or differs from GitHub). Fix before submitting. |
+| `author` = your **Raycast account username** | `package.json` | ✅ `chaim-chv` resolves (verified with `ray lint`), and it must stay identical to the Raycast account handle. |
 | `license: "MIT"` | `package.json` | ✅ |
-| Latest `@raycast/api` | `package.json` | ⚠️ pinned to `1.104.25` on purpose, so one build runs on Raycast 1.x and 2. The review asks for the current major (2.x) — decide whether Raycast 1 support is worth arguing for, or migrate with `bunx ray migrate` and drop it. |
+| Latest `@raycast/api` | `package.json` | ✅ deliberate: `1.104.25`, the last 1.x line. Raycast 2 runs 1.x extensions (no breaking change in 2.0), so one build covers both apps. 2.9.0 was measured to compile this code unchanged; if the review insists on the current major, see the swap recipe in [docs/raycast-versions.md](raycast-versions.md#why-1104-and-not-2x--measured-not-guessed). |
 | `package-lock.json` | repo root | ✅ committed, because the Store's CI installs with npm. `bun.lock` still drives day-to-day work; regenerate the npm lock after changing dependencies with `npm install --package-lock-only`. |
 | `platforms` | `package.json` | ✅ `["macOS"]` |
 | 512×512 PNG icon, not the default Raycast icon | `assets/` | ✅ the ProxyManager app mark |
@@ -72,7 +72,7 @@ Explain Host Routing showing a matched wildcard.
 
 ## What is already correct here
 
-- `ray lint` validates the manifest, the icon, ESLint and Prettier.
+- `ray lint` passes end to end (manifest, icon, ESLint, Prettier, author handle).
 - `bun run build` produces the distribution build the review asks for.
 - Preferences are optional with working defaults, so there is no setup wall.
 - The Store's "About This Extension" panel reads this repo's `README.md`, which
