@@ -31,6 +31,26 @@ How submissions actually work, and what this repo still needs. Source of truth:
    edited the copy in `raycast/extensions`, pull those changes back first with
    `npx @raycast/api@latest pull-contributions`.
 
+## What actually gets published
+
+`ray publish` copies the **working folder verbatim** — no `.gitignore`, no
+manifest `files` filtering. This repo also holds dev-only material (`.agents/`,
+`docs/`, `scripts/`, `tests/`, `AGENTS.md`, `THIRD-PARTY-NOTICES.md`), and the
+first submission carried all of it into `extensions/proxy-manager/`.
+
+Only these belong in the Store folder:
+
+```
+package.json  package-lock.json  tsconfig.json  .eslintrc.json  .prettierrc
+README.md  CHANGELOG.md  LICENSE
+assets/  metadata/  src/
+```
+
+Either publish from a pruned copy, or delete the extras in the PR branch after
+publishing — the first PR (`raycast/extensions#32837`) was cleaned that way, and
+a re-publish will bring them back. Deleting them in the branch is safe: the
+branch is a copy, not this repo.
+
 ## Required in the PR
 
 | Requirement | Where | This repo |
