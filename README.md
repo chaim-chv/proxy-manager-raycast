@@ -59,7 +59,8 @@ Both `add-target` and `explain-host` take an optional `host` argument, so they
 work from a hotkey, a Quicklink or a deeplink:
 
 ```bash
-open "raycast://extensions/chaim-chv/proxy-manager/explain-host?arguments=https%3A%2F%2Fapi.example.com"
+# arguments are URL-encoded JSON, keyed by the manifest argument name
+open "raycast://extensions/chaim-chv/proxy-manager/explain-host?arguments=%7B%22host%22%3A%22api.example.com%22%7D"
 ```
 
 The argument accepts a full URL; the extension extracts and normalises the host.

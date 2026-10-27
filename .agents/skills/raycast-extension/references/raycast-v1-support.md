@@ -1,8 +1,13 @@
 # API 1.104 vs 2.x — what this repo may use
 
-This extension is built with `@raycast/api` **1.104.25** so the same build runs on
-Raycast 1.104 and on Raycast 2. The upstream reference files in this folder were
-written against API ≤ 2.8, so check here before copying a pattern from them.
+This extension is built with `@raycast/api` **2.9.0** (the current major, which
+the Store asks for) but its code stays inside the API that **1.104** also has, so
+one build runs on Raycast 1.104 and on Raycast 2. The upstream reference files in
+this folder were written against API ≤ 2.8, so check here before copying a
+pattern from them.
+
+Verified on Raycast 1.104 with the 2.9.0 build: every command rendered, including
+`getFrontmostApplication()` and `Clipboard`.
 
 ## Available in 1.104 (safe)
 

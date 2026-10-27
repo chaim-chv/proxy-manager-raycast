@@ -43,8 +43,11 @@ Five commands, each with exactly one job. The map is a contract — read
 7. **Copy is calm and specific.** States, not verbs; no "Successfully"; a failure
    says what to do next. `ProxyManagerError.hint` is the one place that maps
    error codes to sentences.
-8. **Raycast 1.x support is a feature.** Do not use APIs added in `@raycast/api`
-   2.0 (see [docs/raycast-versions.md](docs/raycast-versions.md)).
+8. **Raycast 1.x support is a feature.** The dependency is `@raycast/api` 2.9.0,
+   but the *code* must stay inside the API that 1.104 also has, or Raycast 1
+   breaks at runtime. See [docs/raycast-versions.md](docs/raycast-versions.md)
+   for the forbidden-API table; do not add one of those without dropping v1
+   support on purpose.
 9. **Context is a bonus, never a dependency.** The frontmost app, the active tab
    and the clipboard are all optional: each reader in `src/lib/context.ts` is
    guarded and returns `null`. A missing browser extension, a denied API or an
@@ -104,9 +107,13 @@ src/
     navigation.ts           "show this in the app" (socket ui.open → URL scheme)
     toast.ts                failure toast with the unblocking action
 tests/                      bun tests for lib/host.ts
-docs/                       protocol, UX contract, architecture, Raycast versions
+docs/                       protocol, UX contract, architecture, Raycast versions,
+                            Store submission
+metadata/                   Store screenshots (2000×1250)
 .agents/skills/             skills for agents working here
-scripts/make-icon.swift     regenerates assets/extension-icon.png
+CHANGELOG.md                version history the Store shows
+scripts/make-icon.swift     derives the extension icon from the app icon
+scripts/compose-screenshot.swift  composes a window capture onto the Store canvas
 ```
 
 ## Conventions

@@ -37,27 +37,44 @@ How submissions actually work, and what this repo still needs. Source of truth:
 |---|---|---|
 | `author` = your **Raycast account username** | `package.json` | ✅ `chaim-chv` resolves (verified with `ray lint`), and it must stay identical to the Raycast account handle. |
 | `license: "MIT"` | `package.json` | ✅ |
-| Latest `@raycast/api` | `package.json` | ✅ deliberate: `1.104.25`, the last 1.x line. Raycast 2 runs 1.x extensions (no breaking change in 2.0), so one build covers both apps. 2.9.0 was measured to compile this code unchanged; if the review insists on the current major, see the swap recipe in [docs/raycast-versions.md](raycast-versions.md#why-1104-and-not-2x--measured-not-guessed). |
+| Latest `@raycast/api` | `package.json` | ✅ `2.9.0` + `@raycast/utils` `2.3.3`. Verified on Raycast 1.104 as well: every command was opened with the 2.x build (see [raycast-versions.md](raycast-versions.md#why-290-still-runs-on-raycast-1--measured-not-guessed)). |
 | `package-lock.json` | repo root | ✅ committed, because the Store's CI installs with npm. `bun.lock` still drives day-to-day work; regenerate the npm lock after changing dependencies with `npm install --package-lock-only`. |
 | `platforms` | `package.json` | ✅ `["macOS"]` |
 | 512×512 PNG icon, not the default Raycast icon | `assets/` | ✅ the ProxyManager app mark |
 | `CHANGELOG.md` | repo root | ✅ |
 | `README.md` when setup is needed | repo root | ✅ — users must enable Settings → Integration → Allow external control |
-| 3+ screenshots, 2000×1250 PNG | `metadata/` | ❌ none yet |
+| 3+ screenshots, 2000×1250 PNG | `metadata/` | ✅ three: hub, App Routing, Explain Host Routing |
 | No analytics, no Keychain access, no opaque binaries | — | ✅ |
 
 ## Screenshots
 
-Use Raycast's own **Capture Window** command, which hides development-only
-chrome:
+The three in `metadata/` are the ones that tell the story in order: what the
+routing is doing, how an app is routed, and why a host is routed that way.
 
-1. Assign it a hotkey (e.g. `⌘⇧⌥M`).
-2. Open the command you want to capture from this repo's dev build.
-3. Press the hotkey, tick **Save to Metadata**, capture.
+| File | Command | What it proves |
+|---|---|---|
+| `1-proxy-manager.png` | Proxy Manager | State, the frontmost app, the clipboard suggestion and the target list in one screen |
+| `2-app-routing.png` | App Routing | `This App` with its effective mode, plus the rule list |
+| `3-explain-host-routing.png` | Explain Host Routing | Decision, matched wildcard, app context, and the fix as the primary action |
 
-Landscape 2000×1250, same background for all, no secrets on screen. Three
-suggested shots: the hub with a site row, App Routing with the frontmost app, and
-Explain Host Routing showing a matched wildcard.
+Both are 2000×1250 PNG on the same background. To reproduce or replace one:
+
+```bash
+# 1. open the command (the deeplink argument is URL-encoded JSON)
+open 'raycast://extensions/chaim-chv/proxy-manager/explain-host?arguments=%7B%22host%22%3A%22api.whatsapp.com%22%7D'
+
+# 2. capture just the Raycast window (no shadow), then compose the canvas
+screencapture -x -o -R <x,y,w,h> /tmp/window.png
+swift scripts/compose-screenshot.swift /tmp/window.png metadata/3-explain-host-routing.png
+```
+
+`scripts/compose-screenshot.swift` draws the store canvas: a deep gradient, a
+faint glow, and the window with a soft shadow and rounded corners. Raycast's own
+**Capture Window** command (⌘⇧⌥M with *Save to Metadata*) is the alternative if
+you want the desktop wallpaper behind the window instead.
+
+Guidelines that still apply: same background for all shots, no secrets, no other
+apps in frame, landscape 2000×1250.
 
 ## Naming and copy rules that reviewers enforce
 

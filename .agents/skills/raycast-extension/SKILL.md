@@ -14,14 +14,16 @@ adding anything; this skill covers the *how* of Raycast itself.
 | | This repo |
 |---|---|
 | App target | Raycast **1.104+** and Raycast 2 (one build, see `references/raycast-v1-support.md`) |
-| `@raycast/api` | **1.104.25** — not 2.x |
-| `@raycast/utils` | **1.19.1** — not 2.x |
+| `@raycast/api` | **2.9.0** (current major), code limited to the 1.104 surface |
+| `@raycast/utils` | **2.3.3** — pairs with api 2.x |
 | Runtime | Node **22.22.2+** (the app's own runtime) |
 | Package manager | **bun** — `bun install`, `bun run dev`, `bun run build`, `bun test` |
 | `@types/react` | must equal the `@raycast/api` peer version (`19.0.10`) |
 | Platforms | `["macOS"]` |
 
-Anything below that says "2.0" is outside the supported surface here.
+Anything below that says "2.0-only" is outside the supported surface here: the
+dependency is 2.x, but the *code* stays inside the API that 1.104 also has, so
+one build runs on both apps.
 
 The bundled `references/` files are a snapshot of the upstream docs (API ≤ 2.8)
 kept for exact prop names and defaults. **`references/raycast-v1-support.md`

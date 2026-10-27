@@ -324,11 +324,7 @@ export default function Command() {
           icon={{ source: Icon.Plus, tintColor: Color.Green }}
           title="Add Target…"
           subtitle={
-            site?.host
-              ? `Try ${site.host} — the tab you're on`
-              : suggestion
-                ? `Try ${suggestion}`
-                : "Route a host or wildcard through the tunnel"
+            site?.host ? `Starts with ${site.host}` : "Route a host or wildcard through the tunnel"
           }
           actions={
             <ActionPanel>

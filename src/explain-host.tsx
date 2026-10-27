@@ -216,7 +216,9 @@ function HostForm({ onSubmit }: { onSubmit: (host: string) => void }) {
 }
 
 function explanationMarkdown(explanation: Explanation, status: Status): string {
-  const lines: string[] = [`# ${explanation.host}`, ""];
+  // Raycast's markdown auto-links a bare domain even when escaped, so the host
+  // goes in a code span; that keeps it plain text and reads as a literal host.
+  const lines: string[] = [`# \`${explanation.host}\``, ""];
 
   if (status.state === "off" || status.state === "stopping") {
     lines.push("> Routing is off, so nothing is using the tunnel right now.", "");
@@ -227,7 +229,9 @@ function explanationMarkdown(explanation: Explanation, status: Status): string {
   if (explanation.decision === "tunnel") {
     lines.push("## Through the tunnel", "");
     if (explanation.matchedPattern) {
-      lines.push(`Matched the target \`${explanation.matchedPattern}\`.`);
+      lines.push(
+        `Matched the target \`${explanation.matchedPattern}\`, so requests for this host are forwarded to the SOCKS5 tunnel.`,
+      );
     } else {
       lines.push("A per-app rule sends this app's traffic through the tunnel.");
     }
@@ -238,7 +242,7 @@ function explanationMarkdown(explanation: Explanation, status: Status): string {
         `The target \`${explanation.matchedPattern}\` matches, but a per-app rule bypasses the tunnel.`,
       );
     } else {
-      lines.push("No target matches this host, so it leaves without the tunnel.");
+      lines.push("No target matches this host, so requests leave without the tunnel.");
     }
   }
 

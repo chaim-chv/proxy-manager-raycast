@@ -20,8 +20,8 @@ export function primaryAppMode(app: Pick<AppModeTarget, "mode">): {
   mode: AppRoutingMode;
 } {
   return app.mode === "TUNNEL"
-    ? { title: "Send This App Direct", mode: "DIRECT" }
-    : { title: "Route This App Through the Tunnel", mode: "TUNNEL" };
+    ? { title: "Bypass the Tunnel", mode: "DIRECT" }
+    : { title: "Route Through the Tunnel", mode: "TUNNEL" };
 }
 
 /** Upserts a BUNDLE rule, turning per-app routing on first when it was off. */

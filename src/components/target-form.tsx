@@ -1,5 +1,5 @@
 import { Action, ActionPanel, Form, Icon, showHUD } from "@raycast/api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as api from "../lib/api";
 import { normalizePattern } from "../lib/host";
 import { reportFailure } from "../lib/toast";
@@ -24,18 +24,23 @@ export function TargetForm({
   prefill?: string;
   onSaved?: (kind: "added" | "updated", pattern: string) => void | Promise<void>;
 }) {
-  const [pattern, setPattern] = useState(target?.pattern ?? initialPattern ?? "");
+  const initial = target?.pattern ?? initialPattern ?? "";
+  const [pattern, setPattern] = useState(initial);
   const [enabled, setEnabled] = useState(target?.enabled ?? true);
   const [error, setError] = useState<string | undefined>(undefined);
   const [busy, setBusy] = useState(false);
-  const [touched, setTouched] = useState(false);
 
   const editing = target !== undefined;
+  const prefilled = useRef(false);
 
+  // Raycast's TextField fires onChange once on mount, so "did the user type?" is
+  // measured against the initial value, not against a change counter.
   useEffect(() => {
-    if (!prefill || touched || editing || pattern !== "") return;
+    if (!prefill || editing || prefilled.current) return;
+    if (pattern !== initial) return;
+    prefilled.current = true;
     setPattern(prefill);
-  }, [prefill, touched, editing, pattern]);
+  }, [prefill, editing, pattern, initial]);
 
   async function submit(values: Values, keepOpen: boolean) {
     if (busy) return;
@@ -110,7 +115,6 @@ export function TargetForm({
         value={pattern}
         error={error}
         onChange={(value) => {
-          setTouched(true);
           setPattern(value);
           if (error) setError(undefined);
         }}
