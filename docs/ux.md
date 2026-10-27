@@ -59,7 +59,7 @@ on every open and never cached.
 
 | Row | When it appears | Enter | Panel |
 |---|---|---|---|
-| **The site** (`example.com`) | A browser tab is active and the Raycast browser extension is installed | Add as target (when it goes direct) / Explain routing (when a rule already covers it) | Explain, Disable this target, Reveal, Copy host |
+| **The site** (`example.com`) | A browser tab is active and the Raycast browser extension is installed | Add as target (not routed) / Explain routing (already has a rule) | Explain, Disable this target, Turn routing on, Reveal, Copy host |
 | **The app** (`Slack`) | Per-app routing is on and a non-Raycast app was frontmost | Flip tunnel ↔ direct | Explicit `Tunnel all` / `Use targets` / `Direct`, remove rule |
 
 Rules that keep this from becoming clutter:
@@ -67,9 +67,16 @@ Rules that keep this from becoming clutter:
 - **One site row, one app row, maximum.** No lists of tabs, no lists of running
   apps. The site row is dropped when the dashboard falls back to a clipboard
   suggestion (never two "add this host" rows).
-- **The site row shows when it is *already* tunneled**, as a green
-  "Tunneled by `*.example.com`" row. Confirming that the tunnel is doing its job
-  is as valuable as offering to add.
+- **The site row tells the truth about the four cases.** A matching rule is not
+  enough to claim "tunneled":
+  - green "Tunneled by `*.example.com`" only when an **enabled** rule matches, the
+    browser's app mode is not Direct, and routing is on;
+  - "`*.example.com` matches, but Chrome is set to Direct" when an app rule
+    bypasses it;
+  - "Covered by `*.example.com` — routing is off" when the listener is down;
+  - "Add example.com" when no enabled rule matches.
+  The logic lives in `lib/site.ts` and is unit-tested; the row must never
+  congratulate itself for a rule that is disabled.
 - **The app row is hidden while per-app routing is off.** A row that only says
   "nothing here applies" is noise; the App Routing command is where you turn it on.
 - **No blind toggle for apps.** With `Use targets` in play, a boolean flip cannot
