@@ -2,5 +2,6 @@ node_modules/
 dist/
 .raycast/
 raycast-env.d.ts
+.raycast-types/
 *.log
 .DS_Store

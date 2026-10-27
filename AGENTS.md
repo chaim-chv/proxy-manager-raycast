@@ -133,6 +133,10 @@ scripts/compose-screenshot.swift  composes a window capture onto the Store canva
   renders two ways.
 - **Preferences are optional with working defaults.** No required preference
   means no setup form and no `help.md` (a 2.0-only file).
+- **Never hand-write `Preferences` or `Arguments.*` types.** They are generated
+  into `raycast-env.d.ts` from the manifest; use `getPreferenceValues<Preferences>()`
+  and `LaunchProps<{ arguments: Arguments.<Command> }>`. The file is gitignored and
+  `pretypecheck` generates it when missing.
 - **Copy uses typographic quotes in prose, straight quotes in code.**
 
 ## Working with ProxyManager
